@@ -1,0 +1,6 @@
+#!/bin/bash
+# cron.hourly (pistar-flags-dash): reaplica o patch bandeira+nome se um
+# pistar-update tiver revertido o dashboard. Idempotente e silencioso
+# quando nao ha nada a fazer. Roda depois do pistar-hourly (prefixo zz-).
+[ -x /usr/local/sbin/pistar-lh-reapply ] && /usr/local/sbin/pistar-lh-reapply
+exit 0

@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# pistar-lh-reapply — Reaplica o patch bandeira+nome do Last-Heard caso um
+# pistar-update tenha revertido o dashboard. Idempotente: se tudo ja estiver
+# no lugar, sai imediatamente sem tocar no filesystem.
+#
+# Instalado em /usr/local/sbin/ e acionado por /etc/cron.hourly/.
+# Assets de origem em /usr/local/share/lh-flags-patch/ (sobrevivem a updates).
+#
+# Parte do pistar-flags-dash. GPL-3.0.
+
+set -u
+
+SHARE="/usr/local/share/lh-flags-patch"
+LOGF="/var/log/pistar-lh-reapply.log"
+MARK="lh_flag_img"
+
+log() { echo "$(date '+%F %T') $*" >> "$LOGF" 2>/dev/null; }
+
+# localizar dashboard
+DASH=""
+for d in /var/www/dashboard /var/www/html/dashboard; do
+    [ -f "$d/mmdvmhost/lh.php" ] && DASH="$d" && break
+done
+[ -n "$DASH" ] || { log "ERRO: dashboard nao encontrado"; exit 1; }
+
+# assets de origem presentes?
+if [ ! -f "$SHARE/lh_enrich.php" ] || [ ! -x "$SHARE/patch-lh.sh" ] || [ ! -d "$SHARE/flags" ]; then
+    log "ERRO: assets em $SHARE ausentes"; exit 1
+fi
+
+# precisa reaplicar?
+need=0
+grep -q "$MARK" "$DASH/mmdvmhost/lh.php" 2>/dev/null || need=1
+[ -f "$DASH/mmdvmhost/lh_enrich.php" ] || need=1
+[ -f "$DASH/images/flags/br.svg" ] || need=1
+[ "$need" -eq 0 ] && exit 0
+
+log "patch ausente/incompleto -> reaplicando"
+
+# remount rw com fallback
+RW=0
+if mount | grep -qE " / .*[(,]ro[,)]"; then
+    if command -v rpi-rw >/dev/null 2>&1; then rpi-rw && RW=1; fi
+    [ "$RW" -eq 0 ] && { mount -o remount,rw / && RW=1 || { log "ERRO remount rw"; exit 1; }; }
+fi
+
+# backup so se ainda nao existir
+if [ -f "$DASH/mmdvmhost/lh.php" ] && [ ! -f "$DASH/mmdvmhost/lh.php.bak-flags" ]; then
+    cp -n "$DASH/mmdvmhost/lh.php" "$DASH/mmdvmhost/lh.php.bak-flags"
+fi
+
+install -o root -g root -m 0755 "$SHARE/lh_enrich.php" "$DASH/mmdvmhost/lh_enrich.php" 2>>"$LOGF"
+
+mkdir -p "$DASH/images/flags"
+cp "$SHARE"/flags/*.svg "$DASH/images/flags/" 2>>"$LOGF"
+chown -R www-data:www-data "$DASH/images/flags" 2>>"$LOGF"
+chmod 0755 "$DASH/images/flags" 2>>"$LOGF"
+find "$DASH/images/flags" -name '*.svg' -exec chmod 0644 {} + 2>>"$LOGF"
+
+# aplicar patch dinamico (idempotente)
+if "$SHARE/patch-lh.sh" "$DASH/mmdvmhost/lh.php" 2>>"$LOGF"; then
+    log "patch aplicado ($(ls "$DASH"/images/flags/*.svg 2>/dev/null | wc -l) flags)"
+else
+    log "AVISO: patch-lh retornou $?"
+fi
+
+sync
+if [ "$RW" -eq 1 ]; then
+    if command -v rpi-ro >/dev/null 2>&1; then rpi-ro; else mount -o remount,ro / || true; fi
+fi
+log "concluido"
+exit 0

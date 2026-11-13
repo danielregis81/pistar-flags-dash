@@ -1,0 +1,14 @@
+# temporarios de teste / transferencia
+*.b64
+*.tar.gz
+.ttest.sh
+.vtest.sh
+.val.sh
+.lv.sh
+.fval.sh
+.reinstall.sh
+.*.tmp
+
+# SO
+.DS_Store
+Thumbs.db

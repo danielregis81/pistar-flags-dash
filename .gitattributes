@@ -1,0 +1,14 @@
+# Garante fim de linha LF nos arquivos que rodam no Linux (Pi-Star).
+# CRLF quebraria shebang/scripts no destino.
+*.sh            text eol=lf
+*.php           text eol=lf
+pistar-lh-reapply   text eol=lf
+cron/*          text eol=lf
+install.sh      text eol=lf
+INDEX           text eol=lf
+
+# SVG como texto com LF (sao XML)
+*.svg           text eol=lf
+
+# evitar normalizacao surpresa em binarios (nao ha, mas por seguranca)
+*.png           binary
