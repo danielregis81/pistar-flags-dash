@@ -66,6 +66,18 @@ Pi Zero.
 
 ## Instalacao
 
+### 1. Antes de tudo: faca um backup da sua configuracao
+
+No dashboard, va em **Configuration -> Backup/Restore** e baixe o backup (um
+arquivo `.zip`). Guarde esse arquivo no seu computador.
+
+Este patch nao mexe na configuracao do hotspot, mas qualquer mexida no Pi-Star
+merece um backup antes. Se algo der errado, voce restaura o zip na mesma pagina.
+Atencao: o proprio Pi-Star avisa que senhas de sistema/dashboard NAO vao no
+backup (WiFi e senhas das redes DMR vao).
+
+### 2. Instale
+
 No seu hotspot, via SSH:
 
 ```bash
@@ -98,11 +110,28 @@ sudo ./install.sh --uninstall  # remove e restaura o dashboard original
 O instalador cuida de tudo:
 - detecta o dashboard e aborta se for um fork (WPSD etc.);
 - monta o sistema de arquivos como leitura/escrita (`rpi-rw` se existir, senao
-  `mount -o remount,rw /`) e volta pra somente-leitura ao terminar;
+  `mount -o remount,rw /`) e volta pra somente-leitura ao terminar - inclusive
+  se der erro ou se a instalacao for interrompida (Ctrl+C, SSH caiu);
 - faz backup do `lh.php` original antes de qualquer mudanca;
 - aplica o patch de forma nao-destrutiva (injeta so o necessario, nao troca o
   arquivo) e valida a sintaxe com `php -l`;
 - instala a reaplicacao automatica pos-update (veja abaixo).
+
+### O que e instalado e onde
+
+| Onde | O que |
+|------|-------|
+| `/var/www/dashboard/mmdvmhost/lh.php` | recebe o patch (o original fica em `lh.php.bak-flags`) |
+| `/var/www/dashboard/mmdvmhost/lh_enrich.php` | funcoes de pais, nome e tooltip |
+| `/var/www/dashboard/images/flags/` | bandeiras SVG |
+| `/usr/local/share/lh-flags-patch/` | pasta propria do projeto: copia dos arquivos e o script de reaplicacao |
+| `/etc/cron.hourly/zz-pistar-lh-reapply` | gatilho da reaplicacao a cada hora |
+
+Nada e gravado na configuracao do hotspot (`/etc/mmdvmhost`, `/etc/dmrgateway`
+etc.). O script de reaplicacao fica na pasta propria do projeto, fora das
+pastas que o Pi-Star controla por git (`/usr/local/sbin`, `/usr/local/bin`).
+Versoes antigas deste projeto colocavam esse script em `/usr/local/sbin`; o
+instalador atual remove de la automaticamente.
 
 ---
 

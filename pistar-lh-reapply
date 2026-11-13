@@ -4,8 +4,9 @@
 # pistar-update tenha revertido o dashboard. Idempotente: se tudo ja estiver
 # no lugar, sai imediatamente sem tocar no filesystem.
 #
-# Instalado em /usr/local/sbin/ e acionado por /etc/cron.hourly/.
-# Assets de origem em /usr/local/share/lh-flags-patch/ (sobrevivem a updates).
+# Instalado em /usr/local/share/lh-flags-patch/ (pasta propria do projeto,
+# fora dos repositorios git do Pi-Star) e acionado por /etc/cron.hourly/.
+# Assets de origem na mesma pasta (sobrevivem a updates).
 #
 # Parte do pistar-flags-dash. GPL-3.0.
 

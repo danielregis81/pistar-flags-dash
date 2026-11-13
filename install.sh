@@ -25,8 +25,13 @@ set -u
 # Base RAW do repositorio (ajustada na publicacao). Usada no modo remoto.
 RAW_BASE="${PFD_RAW_BASE:-https://raw.githubusercontent.com/danielregis81/pistar-flags-dash/main}"
 
-SHARE="/usr/local/share/lh-flags-patch"   # assets de origem (sobrevivem a update)
-SBIN="/usr/local/sbin/pistar-lh-reapply"
+# Pasta propria do projeto. Fica FORA dos repositorios git do Pi-Star
+# (/var/www/dashboard, /usr/local/bin e /usr/local/sbin sao repos git que o
+# pistar-update sincroniza; nao colocamos nada nosso dentro deles alem do patch).
+SHARE="/usr/local/share/lh-flags-patch"
+REAPPLY="$SHARE/pistar-lh-reapply"
+# Local antigo do script (versoes anteriores). Removido no install e uninstall.
+LEGACY_REAPPLY="/usr/local/sbin/pistar-lh-reapply"
 CRON="/etc/cron.hourly/zz-pistar-lh-reapply"
 LOGF="/var/log/pistar-lh-reapply.log"
 
@@ -78,9 +83,22 @@ fs_rw() {
 }
 fs_ro() {
     [ "$REMOUNTED_RW" -eq 1 ] || return 0
-    if command -v rpi-ro >/dev/null 2>&1; then rpi-ro && return 0; fi
-    mount -o remount,ro / || true
+    sync
+    if command -v rpi-ro >/dev/null 2>&1 && rpi-ro; then REMOUNTED_RW=0; return 0; fi
+    if mount -o remount,ro /; then REMOUNTED_RW=0; return 0; fi
+    err "nao consegui voltar o disco para somente-leitura. Rode: sudo mount -o remount,ro /"
+    return 1
 }
+
+# Garante que o disco volta para somente-leitura e que o staging e apagado
+# em QUALQUER saida: sucesso, erro, die ou interrupcao (Ctrl+C, SSH caiu).
+STAGE=""
+cleanup() {
+    fs_ro
+    if [ -n "$STAGE" ]; then rm -rf "$STAGE"; fi
+}
+trap cleanup EXIT
+trap 'err "interrompido"; exit 130' INT TERM HUP
 
 # ----------------------------------------------------------------------
 # Obter assets (local ou remoto) para um diretorio de staging
@@ -129,8 +147,10 @@ do_status() {
     fi
     [ -f "$d/mmdvmhost/lh_enrich.php" ] && say "lh_enrich.php: presente" || say "lh_enrich.php: ausente"
     [ -d "$d/images/flags" ] && say "flags: $(ls "$d"/images/flags/*.svg 2>/dev/null | wc -l) arquivos" || say "flags: ausentes"
-    [ -x "$SBIN" ] && say "reapply: instalado" || say "reapply: ausente"
+    [ -x "$REAPPLY" ] && say "reapply: instalado ($REAPPLY)" || say "reapply: ausente"
     [ -f "$CRON" ] && say "cron.hourly: instalado" || say "cron.hourly: ausente"
+    [ -f "$LEGACY_REAPPLY" ] && say "AVISO: versao antiga em $LEGACY_REAPPLY (rode o install de novo para remover)"
+    return 0
 }
 
 # ----------------------------------------------------------------------
@@ -144,7 +164,8 @@ do_install() {
         die "Detectado um FORK do dashboard (ex: WPSD/W0CHP). Este patch e so para o Pi-Star OFICIAL. Abortando."
     fi
 
-    local stage; stage="$(mktemp -d)"
+    STAGE="$(mktemp -d)"
+    local stage="$STAGE"
     stage_assets "$stage"
     chmod +x "$stage/patch-lh.sh" "$stage/pistar-lh-reapply" "$stage/zz-pistar-lh-reapply"
 
@@ -188,22 +209,25 @@ do_install() {
     find "$d/images/flags" -name '*.svg' -exec chmod 0644 {} +
 
     # 5) patch dinamico do lh.php (idempotente)
-    if ! "$stage/patch-lh.sh" "$d/mmdvmhost/lh.php"; then
-        rc=$?
+    local rc=0
+    "$stage/patch-lh.sh" "$d/mmdvmhost/lh.php" || rc=$?
+    if [ "$rc" -ne 0 ]; then
         err "patch do lh.php falhou (rc=$rc). Revertendo lh.php do backup."
         cp "$d/mmdvmhost/lh.php.bak-flags" "$d/mmdvmhost/lh.php"
-        fs_ro
-        rm -rf "$stage"
-        exit 1
+        exit 1   # o trap volta o disco para somente-leitura
     fi
 
-    # 6) reapply + cron
-    install -o root -g root -m 0755 "$stage/pistar-lh-reapply" "$SBIN"
+    # 6) reapply (na pasta propria do projeto) + cron
+    install -o root -g root -m 0755 "$stage/pistar-lh-reapply" "$REAPPLY"
     install -o root -g root -m 0755 "$stage/zz-pistar-lh-reapply" "$CRON"
 
-    sync
-    fs_ro
-    rm -rf "$stage"
+    # remove o script do local antigo, que ficava dentro do repo git do Pi-Star
+    if [ -f "$LEGACY_REAPPLY" ]; then
+        rm -f "$LEGACY_REAPPLY"
+        say "removido script do local antigo: $LEGACY_REAPPLY"
+    fi
+
+    fs_ro || true
 
     say "INSTALADO. Abra o dashboard e faca Ctrl+F5."
     say "Desinstalar: sudo $0 --uninstall"
@@ -227,12 +251,11 @@ do_uninstall() {
     fi
     rm -f "$d/mmdvmhost/lh_enrich.php"
     rm -rf "$d/images/flags"
-    rm -f "$SBIN" "$CRON"
+    rm -f "$CRON" "$LEGACY_REAPPLY"
     rm -rf "$SHARE"
     rm -f "$LOGF"
 
-    sync
-    fs_ro
+    fs_ro || true
     say "DESINSTALADO. Faca Ctrl+F5 no dashboard."
 }
 
