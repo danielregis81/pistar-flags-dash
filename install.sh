@@ -1,6 +1,6 @@
-#!/bin/bash
+﻿#!/bin/bash
 #
-# install.sh — Instalador do pistar-flags-dash para Pi-Star OFICIAL.
+# install.sh â€” Instalador do pistar-flags-dash para Pi-Star OFICIAL.
 #
 # Adiciona bandeira do pais + nome do operador na coluna Callsign do
 # Last-Heard do dashboard, de forma leve (roda ate em Pi Zero W) e que
@@ -23,7 +23,7 @@ set -u
 # Config
 # ----------------------------------------------------------------------
 # Base RAW do repositorio (ajustada na publicacao). Usada no modo remoto.
-RAW_BASE="${PFD_RAW_BASE:-https://raw.githubusercontent.com/PP5RD/pistar-flags-dash/main}"
+RAW_BASE="${PFD_RAW_BASE:-https://raw.githubusercontent.com/danielregis81/pistar-flags-dash/main}"
 
 SHARE="/usr/local/share/lh-flags-patch"   # assets de origem (sobrevivem a update)
 SBIN="/usr/local/sbin/pistar-lh-reapply"
@@ -156,7 +156,7 @@ do_install() {
     fs_rw || die "nao consegui montar / como rw"
 
     # UPGRADE: se o lh.php ja estiver patcheado (instalacao anterior) e houver
-    # backup, restaura o original ANTES de reaplicar — assim o patch novo entra
+    # backup, restaura o original ANTES de reaplicar â€” assim o patch novo entra
     # sobre um lh.php limpo (idempotencia nao impede atualizacao de versao).
     if grep -q "lh_flag_img" "$d/mmdvmhost/lh.php" 2>/dev/null \
        && [ -f "$d/mmdvmhost/lh.php.bak-flags" ]; then
