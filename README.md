@@ -1,89 +1,90 @@
-**Portugues** | [English](README.en.md)
+**English** | [Portugues](README.pt-BR.md)
 
 # pistar-flags-dash
 
-Mostra a bandeira do pais, o nome do operador e o codigo do pais (com o nome
-por extenso ao passar o mouse) na lista *Last Heard* do dashboard do
-**Pi-Star oficial** - de um jeito leve o suficiente pra rodar num
-Raspberry Pi Zero W.
+Shows the country flag, the operator name and the country code (with the full
+country name on mouse-over) in the *Last Heard* list of the **official
+Pi-Star** dashboard - light enough to run on a Raspberry Pi Zero W.
 
-![Exemplo do Last Heard com bandeiras, nomes e codigo do pais](docs/screenshot.png)
+![Last Heard example with flags, names and country codes](docs/screenshot.png)
 
-Cada linha ganha a bandeira do pais, o nome do operador e o codigo do pais em
-3 letras (ex.: `(BRA)`, `(USA)`, `(IND)`). Passando o mouse no codigo, aparece
-o nome do pais por extenso - no idioma do dashboard.
-
----
-
-## Por que isso existe
-
-Eu rodo meu hotspot num Raspberry Pi Zero W (ARMv6, single-core). Queria deixar
-o dashboard mais informativo - bandeira do pais, nome de quem esta falando -
-igual aos dashboards "turbinados" que a gente ve por ai.
-
-O caminho natural seria instalar o WPSD (W0CHP-PiStar-Dash), que e excelente e
-tem tudo isso embutido. So que o proprio autor do WPSD avisa, com todas as
-letras, que ele NAO foi feito pra hardware fraco como o Pi Zero W - roda lento
-e pesado nesse tipo de placa. E e verdade: o WPSD calcula e exibe muita coisa
-em tempo real, o que e demais pro Pi Zero.
-
-Eu nao queria o pacote inteiro. Queria so tres coisas: bandeira, nome e pais.
-Entao, em vez de trocar de hardware ou sofrer com um dashboard lento, fiz este
-patch minimo: ele adiciona exatamente essas informacoes ao dashboard OFICIAL do
-Pi-Star, sem o peso de um fork completo.
-
-Resumindo: se voce esta na mesma situacao que eu - Pi-Star oficial, hardware
-modesto (Pi Zero W e afins), e so quer bandeira + nome + pais sem trocar o
-dashboard inteiro - este projeto e pra voce.
-
-> AVISO: e so pra o Pi-Star OFICIAL. Se voce ja usa WPSD ou outro fork, nao
-> precisa disto (eles ja tem essa funcionalidade). O instalador detecta forks
-> e aborta sem mexer em nada.
+Each row gets the country flag, the operator name and a 3-letter country code
+(e.g. `(BRA)`, `(USA)`, `(IND)`). Hovering over the code shows the full country
+name - in the dashboard's language.
 
 ---
 
-## O que ele faz
+## Why this exists
 
-- Bandeira do pais ao lado do indicativo (derivada do prefixo, tabela de
-  prefixos ITU - cobertura mundial, mais de 230 paises e territorios).
-- Nome do operador (lido do `DMRIds.dat`, a mesma base que o Pi-Star ja baixa).
-- Codigo do pais em 3 letras no lugar do antigo link "(GPS)" - que levava pro
-  aprs.fi e, na pratica, nao servia pra muita coisa. Ex.: `(BRA)`, `(USA)`.
-- Tooltip com o nome do pais por extenso, no idioma do dashboard: se o Pi-Star
-  esta em ingles mostra "Brazil"; em portugues, "Brasil".
-- Deixa a coluna *Time* um pouco mais estreita, sobrando espaco pro indicativo.
-- Adiciona uma linha de credito no rodape do dashboard:
+I run my hotspot on a Raspberry Pi Zero W (ARMv6, single-core). I wanted a more
+informative dashboard - country flag, name of who is talking - like the
+"souped-up" dashboards you see around.
+
+The obvious choice would be WPSD (W0CHP-PiStar-Dash), which is excellent and has
+all of this built in. But the WPSD author himself states clearly that it was NOT
+made for weak hardware like the Pi Zero W - it runs slow and heavy on that kind
+of board. And it is true: WPSD computes and shows a lot of things in real time,
+which is too much for a Pi Zero.
+
+I did not want the whole package. I only wanted three things: flag, name and
+country. So instead of replacing my hardware or living with a slow dashboard, I
+wrote this minimal patch: it adds exactly that information to the OFFICIAL
+Pi-Star dashboard, without the weight of a full fork.
+
+In short: if you are in the same situation - official Pi-Star, modest hardware
+(Pi Zero W and similar), and you just want flag + name + country without
+replacing the whole dashboard - this project is for you.
+
+> WARNING: this is for the OFFICIAL Pi-Star only. If you already use WPSD or
+> another fork, you do not need this (they already have this feature). The
+> installer detects forks and aborts without touching anything.
+
+---
+
+## What it does
+
+- Country flag next to the callsign (derived from the prefix using the ITU
+  prefix table - worldwide coverage, more than 230 countries and territories).
+- Operator name (read from `DMRIds.dat`, the same database Pi-Star already
+  downloads).
+- 3-letter country code in place of the old "(GPS)" link - which pointed to
+  aprs.fi and, in practice, was not very useful. E.g. `(BRA)`, `(USA)`.
+- Tooltip with the full country name, in the dashboard's language: with Pi-Star
+  in English it shows "Brazil"; in Portuguese, "Brasil".
+- Makes the *Time* column a bit narrower, leaving more room for the callsign.
+- Adds a credit line to the dashboard footer:
   `Flags, names & country codes: pistar-flags-dash by PP5RD (...)`.
 
-### Por que e leve (importa no Pi Zero)
+### Why it is light (it matters on a Pi Zero)
 
-- A bandeira e uma imagem SVG estatica servida pelo proprio webserver - custo
-  de CPU praticamente zero.
-- O `DMRIds.dat` (~6-7 MB) e lido uma unica vez e os pares indicativo -> nome
-  ficam num cache em disco, refeito so quando o arquivo muda. Nos refreshes de
-  1,5 s, le-se o cache - nao o arquivo inteiro.
-- O resto (pais, codigo, tooltip) e resolvido em memoria, sem rede.
+- The flag is a static SVG image served by the web server itself - practically
+  zero CPU cost.
+- `DMRIds.dat` (~6-7 MB) is read only once, and the callsign -> name pairs are
+  kept in a disk cache that is rebuilt only when the file changes. On the 1.5 s
+  refreshes the cache is read - not the whole file.
+- Everything else (country, code, tooltip) is resolved in memory, with no
+  network access.
 
-Ou seja: nada do processamento pesado que torna os forks completos lentos no
+In other words: none of the heavy processing that makes full forks slow on a
 Pi Zero.
 
 ---
 
-## Instalacao
+## Installation
 
-### 1. Antes de tudo: faca um backup da sua configuracao
+### 1. First of all: back up your configuration
 
-No dashboard, va em **Configuration -> Backup/Restore** e baixe o backup (um
-arquivo `.zip`). Guarde esse arquivo no seu computador.
+On the dashboard, go to **Configuration -> Backup/Restore** and download the
+backup (a `.zip` file). Keep it on your computer.
 
-Este patch nao mexe na configuracao do hotspot, mas qualquer mexida no Pi-Star
-merece um backup antes. Se algo der errado, voce restaura o zip na mesma pagina.
-Atencao: o proprio Pi-Star avisa que senhas de sistema/dashboard NAO vao no
-backup (WiFi e senhas das redes DMR vao).
+This patch does not touch the hotspot configuration, but any change to Pi-Star
+deserves a backup first. If something goes wrong, restore the zip on the same
+page. Note: Pi-Star itself warns that system/dashboard passwords are NOT backed
+up (WiFi and DMR network passwords are).
 
-### 2. Instale
+### 2. Install
 
-No seu hotspot, via SSH:
+On your hotspot, over SSH:
 
 ```bash
 cd /tmp
@@ -92,116 +93,118 @@ cd pistar-flags-dash
 sudo ./install.sh
 ```
 
-Depois, Ctrl+F5 no dashboard (hard refresh pra limpar o cache do navegador).
+Then press Ctrl+F5 on the dashboard (hard refresh to clear the browser cache).
 
-**Por que `cd /tmp` primeiro?** O disco do Pi-Star e somente-leitura, inclusive
-a sua pasta pessoal (`/home/pi-star`). Se voce rodar o `git clone` ali, vai dar
-`Read-only file system`. O `/tmp` fica na memoria e aceita escrita, entao e la
-que o clone deve ficar. O instalador cuida sozinho de liberar a escrita no
-disco so durante a instalacao.
+**Why `cd /tmp` first?** The Pi-Star disk is read-only, including your home
+folder (`/home/pi-star`). If you run `git clone` there you will get
+`Read-only file system`. `/tmp` lives in memory and is writable, so that is
+where the clone should go. The installer itself takes care of enabling writes
+to the disk only during the installation.
 
-**Atencao:** o `/tmp` e apagado quando o Pi reinicia. A instalacao em si
-continua (ela e gravada no disco), mas a pasta clonada some. Pra desinstalar ou
-atualizar depois de um reboot, rode o `cd /tmp` e o `git clone` de novo.
+**Note:** `/tmp` is wiped when the Pi reboots. The installation itself stays
+(it is written to the disk), but the cloned folder is gone. To uninstall or
+update after a reboot, run `cd /tmp` and `git clone` again.
 
-### Comandos
+### Commands
 
 ```bash
-sudo ./install.sh              # instala (ou atualiza)
-sudo ./install.sh --status     # mostra o estado atual
-sudo ./install.sh --uninstall  # remove e restaura o dashboard original
+sudo ./install.sh              # install (or update)
+sudo ./install.sh --status     # show the current state
+sudo ./install.sh --uninstall  # remove and restore the original dashboard
 ```
 
-O instalador cuida de tudo:
-- detecta o dashboard e aborta se for um fork (WPSD etc.);
-- monta o sistema de arquivos como leitura/escrita (`rpi-rw` se existir, senao
-  `mount -o remount,rw /`) e volta pra somente-leitura ao terminar - inclusive
-  se der erro ou se a instalacao for interrompida (Ctrl+C, SSH caiu);
-- faz backup do `lh.php` original antes de qualquer mudanca;
-- aplica o patch de forma nao-destrutiva (injeta so o necessario, nao troca o
-  arquivo) e valida a sintaxe com `php -l`;
-- instala a reaplicacao automatica pos-update (veja abaixo).
+The installer takes care of everything:
+- detects the dashboard and aborts if it is a fork (WPSD etc.);
+- remounts the filesystem read-write (`rpi-rw` if available, otherwise
+  `mount -o remount,rw /`) and back to read-only at the end - even on error or
+  if the installation is interrupted (Ctrl+C, SSH dropped);
+- backs up the original `lh.php` before any change;
+- applies the patch non-destructively (it only injects what is needed and does
+  not replace the file) and checks the syntax with `php -l`;
+- installs the automatic post-update re-apply (see below).
 
-### O que e instalado e onde
+### What is installed and where
 
-| Onde | O que |
-|------|-------|
-| `/var/www/dashboard/mmdvmhost/lh.php` | recebe o patch (o original fica em `lh.php.bak-flags`) |
-| `/var/www/dashboard/mmdvmhost/lh_enrich.php` | funcoes de pais, nome e tooltip |
-| `/var/www/dashboard/images/flags/` | bandeiras SVG |
-| `/usr/local/share/lh-flags-patch/` | pasta propria do projeto: copia dos arquivos e o script de reaplicacao |
-| `/etc/cron.hourly/zz-pistar-lh-reapply` | gatilho da reaplicacao a cada hora |
+| Where | What |
+|-------|------|
+| `/var/www/dashboard/mmdvmhost/lh.php` | gets the patch (the original is kept as `lh.php.bak-flags`) |
+| `/var/www/dashboard/mmdvmhost/lh_enrich.php` | country, name and tooltip functions |
+| `/var/www/dashboard/images/flags/` | SVG flags |
+| `/usr/local/share/lh-flags-patch/` | the project's own folder: copy of the files and the re-apply script |
+| `/etc/cron.hourly/zz-pistar-lh-reapply` | hourly re-apply trigger |
 
-Nada e gravado na configuracao do hotspot (`/etc/mmdvmhost`, `/etc/dmrgateway`
-etc.). O script de reaplicacao fica na pasta propria do projeto, fora das
-pastas que o Pi-Star controla por git (`/usr/local/sbin`, `/usr/local/bin`).
-Versoes antigas deste projeto colocavam esse script em `/usr/local/sbin`; o
-instalador atual remove de la automaticamente.
-
----
-
-## Sobrevive aos updates do Pi-Star
-
-O dashboard do Pi-Star e um repositorio git, e um `pistar-update` pode reverter
-o `lh.php`. Pra isso nao derrubar a customizacao, o projeto instala um
-`cron.hourly` que reaplica o patch sozinho caso detecte que ele sumiu. Quando
-nao ha nada a fazer, ele sai na hora, sem tocar no disco.
+Nothing is written to the hotspot configuration (`/etc/mmdvmhost`,
+`/etc/dmrgateway` etc.). The re-apply script lives in the project's own folder,
+outside the folders Pi-Star manages with git (`/usr/local/sbin`,
+`/usr/local/bin`). Older versions of this project put that script in
+`/usr/local/sbin`; the current installer removes it from there automatically.
 
 ---
 
-## Desinstalacao
+## Survives Pi-Star updates
+
+The Pi-Star dashboard is a git repository, and a `pistar-update` may revert
+`lh.php`. So that this does not undo the customization, the project installs a
+`cron.hourly` job that re-applies the patch by itself if it detects that it is
+gone. When there is nothing to do, it exits right away without touching the
+disk.
+
+---
+
+## Uninstall
 
 ```bash
 sudo ./install.sh --uninstall
 ```
 
-Restaura o `lh.php` original (do backup), remove as bandeiras, o
-`lh_enrich.php`, o script de reaplicacao e o cron. Ctrl+F5 depois.
+Restores the original `lh.php` (from the backup) and removes the flags,
+`lh_enrich.php`, the re-apply script and the cron job. Press Ctrl+F5 afterwards.
 
 ---
 
-## Limitacoes (sendo honesto)
+## Limitations (to be honest)
 
-- Nome vem do `DMRIds.dat` (base DMR). Indicativos que nao estiverem nessa base
-  aparecem so com a bandeira - sem nome. Nenhum erro, so nao tem o dado.
-- Bandeira/pais dependem do prefixo do indicativo (tabela ITU). Cobre a grande
-  maioria, mas se aparecer um prefixo nao mapeado a linha fica sem bandeira (sem
-  quebrar nada). PRs de novos prefixos sao bem-vindos.
-- Pensado e testado no Pi-Star oficial (v4.2.6, Pi Zero W). Nao testei em todas
-  as versoes/forks - e em forks ele nem instala, de proposito.
+- The name comes from `DMRIds.dat` (DMR database). Callsigns that are not in
+  that database show only the flag - no name. No error, the data is just not
+  there.
+- Flag/country depend on the callsign prefix (ITU table). It covers the vast
+  majority, but if an unmapped prefix shows up the row has no flag (nothing
+  breaks). PRs with new prefixes are welcome.
+- Designed and tested on the official Pi-Star (v4.2.6, Pi Zero W). I have not
+  tested every version/fork - and on forks it does not even install, on purpose.
 
 ---
 
-## Estrutura
+## Layout
 
 ```
 pistar-flags-dash/
-|- install.sh               # instala / desinstala / status
-|- lib/patch-lh.sh          # patch nao-destrutivo e idempotente do lh.php
+|- install.sh               # install / uninstall / status
+|- lib/patch-lh.sh          # non-destructive, idempotent lh.php patch
 |- src/
-|  |- lh_enrich.php         # funcoes: pais (ITU), nome (DMRIds+cache), tooltip
-|  \- flags/                # bandeiras SVG (ISO-3166-1 alpha-2) + INDEX
-|- pistar-lh-reapply        # reaplicacao pos-update
-|- cron/zz-pistar-lh-reapply # gatilho cron.hourly
+|  |- lh_enrich.php         # functions: country (ITU), name (DMRIds+cache), tooltip
+|  \- flags/                # SVG flags (ISO-3166-1 alpha-2) + INDEX
+|- pistar-lh-reapply        # post-update re-apply
+|- cron/zz-pistar-lh-reapply # cron.hourly trigger
 |- docs/screenshot.png
-|- README.md                # este arquivo (portugues)
-|- README.en.md             # versao em ingles
+|- README.md                # this file (English)
+|- README.pt-BR.md          # Portuguese version
 \- LICENSE                  # GPL-3.0
 ```
 
 ---
 
-## Creditos
+## Credits
 
-- Andy Taylor (MW0MWZ) - criador do Pi-Star, que tornou tudo isso possivel.
+- Andy Taylor (MW0MWZ) - creator of Pi-Star, who made all of this possible.
 - Hampus Borgos - [country-flags](https://github.com/hampusborgos/country-flags),
-  as bandeiras SVG (dominio publico).
-- A ideia de bandeira por indicativo e inspirada em forks do Pi-Star (como o
-  WPSD/W0CHP) e em projetos como o `xlxd`.
+  the SVG flags (public domain).
+- The idea of a flag per callsign is inspired by Pi-Star forks (such as
+  WPSD/W0CHP) and by projects like `xlxd`.
 
-Este NAO e um projeto oficial do Pi-Star. Use por sua conta e risco.
+This is NOT an official Pi-Star project. Use at your own risk.
 
-## Licenca
+## License
 
-GPL-3.0 - veja [LICENSE](LICENSE). O Pi-Star e GPL; este e um trabalho derivado
-e segue a mesma licenca.
+GPL-3.0 - see [LICENSE](LICENSE). Pi-Star is GPL; this is a derivative work and
+follows the same license.
