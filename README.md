@@ -69,12 +69,23 @@ Pi Zero.
 No seu hotspot, via SSH:
 
 ```bash
+cd /tmp
 git clone https://github.com/danielregis81/pistar-flags-dash.git
 cd pistar-flags-dash
 sudo ./install.sh
 ```
 
 Depois, Ctrl+F5 no dashboard (hard refresh pra limpar o cache do navegador).
+
+**Por que `cd /tmp` primeiro?** O disco do Pi-Star e somente-leitura, inclusive
+a sua pasta pessoal (`/home/pi-star`). Se voce rodar o `git clone` ali, vai dar
+`Read-only file system`. O `/tmp` fica na memoria e aceita escrita, entao e la
+que o clone deve ficar. O instalador cuida sozinho de liberar a escrita no
+disco so durante a instalacao.
+
+**Atencao:** o `/tmp` e apagado quando o Pi reinicia. A instalacao em si
+continua (ela e gravada no disco), mas a pasta clonada some. Pra desinstalar ou
+atualizar depois de um reboot, rode o `cd /tmp` e o `git clone` de novo.
 
 ### Comandos
 
