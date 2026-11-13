@@ -66,6 +66,7 @@ perl -0777 -i -pe '
 .lh-iso3 .lh-tip:after\{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
   border:5px solid transparent;border-top-color:#222;\}
 .lh-iso3:hover .lh-tip\{display:block;\}
+.footer::after\{content:"Flags, names & country codes: pistar-flags-dash by PP5RD (github.com/danielregis81/pistar-flags-dash)";display:block;margin-top:6px;opacity:0.85;\}
 </style>
 $1}s;
 
