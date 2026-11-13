@@ -1,3 +1,5 @@
+**Portugues** | [English](README.en.md)
+
 # pistar-flags-dash
 
 Mostra a bandeira do pais, o nome do operador e o codigo do pais (com o nome
@@ -43,12 +45,15 @@ dashboard inteiro - este projeto e pra voce.
 ## O que ele faz
 
 - Bandeira do pais ao lado do indicativo (derivada do prefixo, tabela de
-  prefixos ITU - cobertura mundial, ~250 paises).
+  prefixos ITU - cobertura mundial, mais de 230 paises e territorios).
 - Nome do operador (lido do `DMRIds.dat`, a mesma base que o Pi-Star ja baixa).
 - Codigo do pais em 3 letras no lugar do antigo link "(GPS)" - que levava pro
   aprs.fi e, na pratica, nao servia pra muita coisa. Ex.: `(BRA)`, `(USA)`.
 - Tooltip com o nome do pais por extenso, no idioma do dashboard: se o Pi-Star
   esta em ingles mostra "Brazil"; em portugues, "Brasil".
+- Deixa a coluna *Time* um pouco mais estreita, sobrando espaco pro indicativo.
+- Adiciona uma linha de credito no rodape do dashboard:
+  `Flags, names & country codes: pistar-flags-dash by PP5RD (...)`.
 
 ### Por que e leve (importa no Pi Zero)
 
@@ -179,7 +184,8 @@ pistar-flags-dash/
 |- pistar-lh-reapply        # reaplicacao pos-update
 |- cron/zz-pistar-lh-reapply # gatilho cron.hourly
 |- docs/screenshot.png
-|- README.md
+|- README.md                # este arquivo (portugues)
+|- README.en.md             # versao em ingles
 \- LICENSE                  # GPL-3.0
 ```
 
