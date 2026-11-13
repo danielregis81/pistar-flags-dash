@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# patch-lh.sh — Aplica (idempotente) o patch de bandeira + nome do operador
+# patch-lh.sh - Aplica (idempotente) o patch de bandeira + nome do operador
 # no lh.php do dashboard Pi-Star OFICIAL, SEM substituir o arquivo: injeta
 # apenas as linhas necessarias no arquivo que ja esta instalado.
 #

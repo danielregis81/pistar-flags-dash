@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# pistar-lh-reapply — Reaplica o patch bandeira+nome do Last-Heard caso um
+# pistar-lh-reapply - Reaplica o patch bandeira+nome do Last-Heard caso um
 # pistar-update tenha revertido o dashboard. Idempotente: se tudo ja estiver
 # no lugar, sai imediatamente sem tocar no filesystem.
 #

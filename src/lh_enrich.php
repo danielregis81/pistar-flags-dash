@@ -1,6 +1,6 @@
 <?php
 /**
- * lh_enrich.php — Helpers para enriquecer o Last-Heard do dashboard
+ * lh_enrich.php - Helpers para enriquecer o Last-Heard do dashboard
  * Pi-Star OFICIAL com:
  *   1) bandeira do pais (derivada do prefixo do indicativo, alocacao ITU)
  *   2) nome do operador (lookup em DMRIds.dat, com cache)
