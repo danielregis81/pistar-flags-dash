@@ -63,7 +63,9 @@ if (!defined('LH_ENRICH_LOADED')) {
             'IZ'=>'it','IK'=>'it','IW'=>'it','IU'=>'it','IN'=>'it','IR'=>'it','IQ'=>'it','IO'=>'it','IS'=>'it','IT'=>'it',
             'ON'=>'be','OO'=>'be','OP'=>'be','OQ'=>'be','OR'=>'be','OS'=>'be','OT'=>'be',
             'PA'=>'nl','PB'=>'nl','PC'=>'nl','PD'=>'nl','PE'=>'nl','PF'=>'nl','PG'=>'nl','PH'=>'nl','PI'=>'nl',
-            'GI'=>'gb','GM'=>'gb','GW'=>'gb','GD'=>'gb','GJ'=>'gb','GU'=>'gb','2E'=>'gb',
+            'GI'=>'gb','GM'=>'gb','GW'=>'gb','2E'=>'gb',
+            // dependencias da Coroa (entidades DXCC e bandeiras proprias)
+            'GD'=>'im','MD'=>'im','2D'=>'im','GJ'=>'je','MJ'=>'je','2J'=>'je','GU'=>'gg','MU'=>'gg','2U'=>'gg',
             'EI'=>'ie','EJ'=>'ie',
             'OE'=>'at','HB'=>'ch','HE'=>'ch','LX'=>'lu','OZ'=>'dk','LA'=>'no','LB'=>'no','LC'=>'no',
             'SM'=>'se','SA'=>'se','SB'=>'se','SC'=>'se','SD'=>'se','SE'=>'se','SF'=>'se','SG'=>'se','SH'=>'se','SI'=>'se','SJ'=>'se','SK'=>'se','SL'=>'se','SM'=>'se',
@@ -103,6 +105,18 @@ if (!defined('LH_ENRICH_LOADED')) {
             'D2'=>'ao','C9'=>'mz','7Q'=>'mw','V5'=>'na','A2'=>'bw','3DA'=>'sz','7P'=>'ls','Z2'=>'zw','3B'=>'mu','S7'=>'sc',
             'TZ'=>'ml','XT'=>'bf','6V'=>'sn','J5'=>'gw','D4'=>'cv','3C'=>'gq','TJ'=>'cm','9Q'=>'cd','9U'=>'bi','9X'=>'rw',
             'ET'=>'et','E3'=>'er','T5'=>'so','J2'=>'dj',
+            // ---- Complementos (2026-11-13) ----
+            'TA'=>'tr','TB'=>'tr','TC'=>'tr','YM'=>'tr',
+            'YA'=>'af','T6'=>'af','C3'=>'ad','HB0'=>'li','E4'=>'ps','OX'=>'gl','XP'=>'gl','JW'=>'sj',
+            'JT'=>'mn','JU'=>'mn','JV'=>'mn','7O'=>'ye','8Q'=>'mv','4W'=>'tl','V8'=>'bn','P5'=>'kp',
+            'EL'=>'lr','5L'=>'lr','5M'=>'lr','6Z'=>'lr','A8'=>'lr','D5'=>'lr',
+            '5V'=>'tg','3X'=>'gn','S0'=>'eh','S9'=>'st','D6'=>'km','Z8'=>'ss',
+            '6Y'=>'jm','8P'=>'bb','C6'=>'bs','V3'=>'bz','9Y'=>'tt','9Z'=>'tt','V4'=>'kn','V2'=>'ag',
+            'P4'=>'aw','PJ2'=>'cw','PJ4'=>'bq','PJ7'=>'sx','ZF'=>'ky','VP9'=>'bm','VP5'=>'tc','VP8'=>'fk','VP6'=>'pn','ZD7'=>'sh',
+            'KP2'=>'vi','NP2'=>'vi','WP2'=>'vi','KH2'=>'gu','KH0'=>'mp','KH8'=>'as',
+            'V6'=>'fm','V7'=>'mh','T8'=>'pw','C2'=>'nr','E6'=>'nu','ZK3'=>'tk',
+            'FR'=>'re','FG'=>'gp','FM'=>'mq','FS'=>'mf','FJ'=>'bl','FP'=>'pm','FH'=>'yt','FW'=>'wf',
+            'OH0'=>'ax','VQ9'=>'io',
         );
         return $map;
     }
@@ -180,6 +194,15 @@ if (!defined('LH_ENRICH_LOADED')) {
                 'mw'=>'MWI','na'=>'NAM','bw'=>'BWA','sz'=>'SWZ','ls'=>'LSO','zw'=>'ZWE','mu'=>'MUS',
                 'sc'=>'SYC','ml'=>'MLI','bf'=>'BFA','gw'=>'GNB','cv'=>'CPV','gq'=>'GNQ','cd'=>'COD',
                 'bi'=>'BDI','rw'=>'RWA','et'=>'ETH','er'=>'ERI','so'=>'SOM','dj'=>'DJI',
+                'tr'=>'TUR','af'=>'AFG','ad'=>'AND','li'=>'LIE','ps'=>'PSE','gl'=>'GRL','sj'=>'SJM',
+                'mn'=>'MNG','ye'=>'YEM','mv'=>'MDV','tl'=>'TLS','bn'=>'BRN','kp'=>'PRK','lr'=>'LBR',
+                'tg'=>'TGO','gn'=>'GIN','eh'=>'ESH','st'=>'STP','km'=>'COM','ss'=>'SSD',
+                'jm'=>'JAM','bb'=>'BRB','bs'=>'BHS','bz'=>'BLZ','tt'=>'TTO','kn'=>'KNA','ag'=>'ATG',
+                'aw'=>'ABW','cw'=>'CUW','bq'=>'BES','sx'=>'SXM','ky'=>'CYM','bm'=>'BMU','tc'=>'TCA',
+                'fk'=>'FLK','pn'=>'PCN','sh'=>'SHN','vi'=>'VIR','gu'=>'GUM','mp'=>'MNP','as'=>'ASM',
+                'fm'=>'FSM','mh'=>'MHL','pw'=>'PLW','nr'=>'NRU','nu'=>'NIU','tk'=>'TKL',
+                're'=>'REU','gp'=>'GLP','mq'=>'MTQ','mf'=>'MAF','bl'=>'BLM','pm'=>'SPM','yt'=>'MYT','wf'=>'WLF',
+                'im'=>'IMN','je'=>'JEY','gg'=>'GGY','gi'=>'GIB','ax'=>'ALA','io'=>'IOT',
             );
         }
         $k = strtolower((string)$iso2);
@@ -240,6 +263,15 @@ if (!defined('LH_ENRICH_LOADED')) {
                 'mw'=>'Malawi','na'=>'Namibia','bw'=>'Botswana','sz'=>'Eswatini','ls'=>'Lesotho','zw'=>'Zimbabwe','mu'=>'Mauritius',
                 'sc'=>'Seychelles','ml'=>'Mali','bf'=>'Burkina Faso','gw'=>'Guinea-Bissau','cv'=>'Cape Verde','gq'=>'Equatorial Guinea','cd'=>'DR Congo',
                 'bi'=>'Burundi','rw'=>'Rwanda','et'=>'Ethiopia','er'=>'Eritrea','so'=>'Somalia','dj'=>'Djibouti',
+                'tr'=>'Turkey','af'=>'Afghanistan','ad'=>'Andorra','li'=>'Liechtenstein','ps'=>'Palestine','gl'=>'Greenland','sj'=>'Svalbard',
+                'mn'=>'Mongolia','ye'=>'Yemen','mv'=>'Maldives','tl'=>'Timor-Leste','bn'=>'Brunei','kp'=>'North Korea','lr'=>'Liberia',
+                'tg'=>'Togo','gn'=>'Guinea','eh'=>'Western Sahara','st'=>'Sao Tome and Principe','km'=>'Comoros','ss'=>'South Sudan',
+                'jm'=>'Jamaica','bb'=>'Barbados','bs'=>'Bahamas','bz'=>'Belize','tt'=>'Trinidad and Tobago','kn'=>'Saint Kitts and Nevis','ag'=>'Antigua and Barbuda',
+                'aw'=>'Aruba','cw'=>'Curacao','bq'=>'Caribbean Netherlands','sx'=>'Sint Maarten','ky'=>'Cayman Islands','bm'=>'Bermuda','tc'=>'Turks and Caicos',
+                'fk'=>'Falkland Islands','pn'=>'Pitcairn Islands','sh'=>'Saint Helena','vi'=>'US Virgin Islands','gu'=>'Guam','mp'=>'Northern Mariana Islands','as'=>'American Samoa',
+                'fm'=>'Micronesia','mh'=>'Marshall Islands','pw'=>'Palau','nr'=>'Nauru','nu'=>'Niue','tk'=>'Tokelau',
+                're'=>'Reunion','gp'=>'Guadeloupe','mq'=>'Martinique','mf'=>'Saint Martin','bl'=>'Saint Barthelemy','pm'=>'Saint Pierre and Miquelon','yt'=>'Mayotte','wf'=>'Wallis and Futuna',
+                'im'=>'Isle of Man','je'=>'Jersey','gg'=>'Guernsey','gi'=>'Gibraltar','ax'=>'Aland Islands','io'=>'British Indian Ocean Territory',
             );
         }
         if ($pt === null) {
@@ -271,6 +303,15 @@ if (!defined('LH_ENRICH_LOADED')) {
                 'mw'=>'Malawi','na'=>'Namibia','bw'=>'Botsuana','sz'=>'Essuatini','ls'=>'Lesoto','zw'=>'Zimbabue','mu'=>'Mauricio',
                 'sc'=>'Seicheles','ml'=>'Mali','bf'=>'Burquina Faso','gw'=>'Guine-Bissau','cv'=>'Cabo Verde','gq'=>'Guine Equatorial','cd'=>'Republica Democratica do Congo',
                 'bi'=>'Burundi','rw'=>'Ruanda','et'=>'Etiopia','er'=>'Eritreia','so'=>'Somalia','dj'=>'Djibuti',
+                'tr'=>'Turquia','af'=>'Afeganistao','ad'=>'Andorra','li'=>'Liechtenstein','ps'=>'Palestina','gl'=>'Groenlandia','sj'=>'Svalbard',
+                'mn'=>'Mongolia','ye'=>'Iemen','mv'=>'Maldivas','tl'=>'Timor-Leste','bn'=>'Brunei','kp'=>'Coreia do Norte','lr'=>'Liberia',
+                'tg'=>'Togo','gn'=>'Guine','eh'=>'Saara Ocidental','st'=>'Sao Tome e Principe','km'=>'Comores','ss'=>'Sudao do Sul',
+                'jm'=>'Jamaica','bb'=>'Barbados','bs'=>'Bahamas','bz'=>'Belize','tt'=>'Trinidad e Tobago','kn'=>'Sao Cristovao e Neves','ag'=>'Antigua e Barbuda',
+                'aw'=>'Aruba','cw'=>'Curacao','bq'=>'Caribe Neerlandes','sx'=>'Sint Maarten','ky'=>'Ilhas Cayman','bm'=>'Bermudas','tc'=>'Turcas e Caicos',
+                'fk'=>'Ilhas Malvinas','pn'=>'Ilhas Pitcairn','sh'=>'Santa Helena','vi'=>'Ilhas Virgens Americanas','gu'=>'Guam','mp'=>'Ilhas Marianas do Norte','as'=>'Samoa Americana',
+                'fm'=>'Micronesia','mh'=>'Ilhas Marshall','pw'=>'Palau','nr'=>'Nauru','nu'=>'Niue','tk'=>'Tokelau',
+                're'=>'Reuniao','gp'=>'Guadalupe','mq'=>'Martinica','mf'=>'Sao Martinho','bl'=>'Sao Bartolomeu','pm'=>'Sao Pedro e Miquelao','yt'=>'Mayotte','wf'=>'Wallis e Futuna',
+                'im'=>'Ilha de Man','je'=>'Jersey','gg'=>'Guernsey','gi'=>'Gibraltar','ax'=>'Ilhas Aland','io'=>'Territorio Britanico do Oceano Indico',
             );
         }
 
